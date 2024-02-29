@@ -4,51 +4,83 @@ using MongoDB.Driver;
 
 namespace IntervalProcessing.Utilities
 {
-    public class MongoCursor<T>
+    public class MongoCursor
     {
-        // Executes a find operation based on the provided query and projection, then applies the action to each document.
-        public void ExecuteCursor(MongoConnection<T> mongoConnection, string query, string projection, Action<T> processDocument)
-        {
-            BsonDocument bsonQuery = BsonSerializer.Deserialize<BsonDocument>(query);
-            BsonDocument bsonProjection = BsonSerializer.Deserialize<BsonDocument>(projection);
-            FindOptions findOptions = new FindOptions();
-            //findOptions.Projection = bsonProjection;
+        public string query { get; set; }
 
-            using (IAsyncCursor<T> cursor = mongoConnection.Collection.Find(bsonQuery, findOptions).ToCursor())
-            {
-                while (cursor.MoveNext())
-                {
-                    foreach (T document in cursor.Current)
-                    {
-                        processDocument(document);
-                    }
-                }
-            }
+        public string projection { get; set; }
+
+        public string? sort { get; set; }
+
+        private string _collectionName;
+
+        private MongoConnection<BsonDocument> _connection;
+
+        public MongoCursor(string query, string projection, string collectionName, MongoConnection<BsonDocument> connection)
+        { 
+            this.query = query;
+            this.projection = projection;
+            sort = null;
+            _collectionName = collectionName;
+            _connection = connection;
+            _connection.SetCollection(collectionName);
         }
 
-        // Executes an aggregation pipeline operation and applies the action to each resulting document.
-        public void ExecuteAggregateCursor(MongoConnection<T> mongoConnection, string collectionName, string queryPipeline, Action<T> processDocument)
+        public MongoCursor(string query, string projection, string sort, string collectionName, MongoConnection<BsonDocument> connection)
         {
-            AggregateOptions aggregateOptions = new AggregateOptions { AllowDiskUse = true };
+            this.query = query;
+            this.projection = projection;
+            this.sort = sort;
+            _collectionName = collectionName;
+            _connection = connection;
+            _connection.SetCollection(collectionName);
+        }
 
-            // Deserialize the JSON string into a list of BsonDocument
-            List<BsonDocument> stages = BsonSerializer.Deserialize<List<BsonDocument>>(queryPipeline);
+        public async Task<bool> ExecuteCursor(Action<BsonDocument> delegatedAction, int? batchSize = null) 
+        {
+            FindOptions<BsonDocument> options = SetupCursorOptions(batchSize);
 
-            // Convert the list of BsonDocument stages into a PipelineDefinition
-            PipelineDefinition<T, BsonDocument> pipelineDefinition = PipelineDefinition<T, BsonDocument>.Create(stages);
-
-
-            using (IAsyncCursor<T> cursor = mongoConnection.Collection.Aggregate(pipelineDefinition, aggregateOptions).ToCursor())
+            using (IAsyncCursor<BsonDocument> cursor = await _connection.Collection.FindAsync(BsonSerializer.Deserialize<BsonDocument>(this.query), options))
             {
-                while (cursor.MoveNext())
+                while (await cursor.MoveNextAsync())
                 {
-                    foreach (T document in cursor.Current)
+                    IEnumerable<BsonDocument> batch = cursor.Current;
+
+                    foreach (BsonDocument document in batch)
                     {
-                        processDocument(document);
+                        delegatedAction(document);
                     }
                 }
             }
+
+            return true;
+        }
+
+        private FindOptions<BsonDocument> SetupCursorOptions(int? batchSize) 
+        {
+            FindOptions<BsonDocument> options = new FindOptions<BsonDocument>
+            {
+                Projection = BsonSerializer.Deserialize<BsonDocument>(this.projection),
+                NoCursorTimeout = false, 
+            };
+
+            if (batchSize != null)
+            {
+                options.BatchSize = batchSize;
+            }
+
+            if (!string.IsNullOrEmpty(this.sort))
+            {
+                options.Sort = BsonSerializer.Deserialize<BsonDocument>(this.sort);
+            }
+
+            return options;
+        }
+
+        public void ChangeCollection(string collectionName) 
+        {
+            _collectionName = collectionName;
+            _connection.SetCollection(_collectionName);
         }
     }
-
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace IntervalProcessing.Utilities
+namespace IntervalProcessing.Writers
 {
     public abstract class BaseWriter<T>
     {
@@ -9,24 +9,33 @@ namespace IntervalProcessing.Utilities
         public string FileName { get; private set; }
         public FileInfo FileInfo { get; private set; }
 
-        public BaseWriter(string fileName)
+        public BaseWriter(FileInfo file)
         {
-            FileName = fileName;
-            FileInfo = new FileInfo(fileName);
+            FileInfo = file;
+            FileName = file.Name;
             _writer = new StreamWriter(FileInfo.OpenWrite());
+            WriteHeader();
         }
 
         protected abstract string Parse(T input);
 
-        public void Write(T input)
+        protected abstract string GetHeader();
+
+        public void Write(dynamic input)
         {
             string line = Parse(input);
             _writer.WriteLine(line);
         }
 
-        public void WriteMultiple(IEnumerable<T> inputs)
+        public void WriteHeader()
         {
-            foreach (var input in inputs)
+            string line = GetHeader();
+            _writer.WriteLine(line);
+        }
+
+        public void WriteMultiple(IEnumerable<dynamic> inputs)
+        {
+            foreach (dynamic input in inputs)
             {
                 Write(input);
             }

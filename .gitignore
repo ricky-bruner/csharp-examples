@@ -181,3 +181,4 @@ $RECYCLE.BIN/
 *.csproj.csdat
 *.csproj.user
 *.userprefs
+/IntervalProcessing/IntervalProcessing/config.json
