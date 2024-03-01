@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using IntervalProcessing.Interfaces;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
@@ -14,9 +15,9 @@ namespace IntervalProcessing.Utilities
 
         private string _collectionName;
 
-        private MongoConnection<BsonDocument> _connection;
+        private IMongoConnection<BsonDocument> _connection;
 
-        public MongoCursor(string query, string projection, string collectionName, MongoConnection<BsonDocument> connection)
+        public MongoCursor(string query, string projection, string collectionName, IMongoConnection<BsonDocument> connection)
         { 
             this.query = query;
             this.projection = projection;
@@ -26,7 +27,7 @@ namespace IntervalProcessing.Utilities
             _connection.SetCollection(collectionName);
         }
 
-        public MongoCursor(string query, string projection, string sort, string collectionName, MongoConnection<BsonDocument> connection)
+        public MongoCursor(string query, string projection, string sort, string collectionName, IMongoConnection<BsonDocument> connection)
         {
             this.query = query;
             this.projection = projection;

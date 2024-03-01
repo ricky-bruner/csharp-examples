@@ -1,46 +1,43 @@
-﻿using IntervalProcessing.Processors;
+﻿using IntervalProcessing.Interfaces;
+using IntervalProcessing.Processors;
 using IntervalProcessing.Utilities;
 using IntervalProcessing.Writers;
+using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using static IntervalProcessing.Utilities.Constants.DatabaseCollections;
 
 namespace IntervalProcessing
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            while (true)
+            Console.WriteLine($"{DateTime.Now} - Initiating IntervalProcessing Processes...");
+
+            //if (DateTime.Now.Hour == 2)
             {
-                Console.WriteLine($"{DateTime.Now} - Awake...");
+                ServiceCollection serviceCollection = new ServiceCollection();
+                ConfigureServices(serviceCollection);
+                ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
-                //if (DateTime.Now.Hour == 2)
-                {
-                    RunProcesses();
-                }
-
-                // Sleep for 1 hour (60 minutes * 60 seconds * 1000 milliseconds)
-                Console.WriteLine($"{DateTime.Now} - Sleeping...");
-                Thread.Sleep(60 * 60 * 1000);
+                App app = serviceProvider.GetService<App>();
+                app.Run();
             }
+
+            Console.WriteLine($"{DateTime.Now} - IntervalProcessing Complete...");
         }
 
-        static void RunProcesses()
+        private static void ConfigureServices(IServiceCollection services) 
         {
-            Console.WriteLine($"{ DateTime.Now} - Running scheduled processes...");
+            services.AddSingleton(typeof(IMongoConnection<BsonDocument>), provider => 
+                new MongoConnection<BsonDocument>(CoreConfig.GetMongoConnectionString(), CoreConfig.GetDatabase(), StoredQueries));
+            services.AddSingleton<IWriterFactory, WriterFactory>();
+            services.AddSingleton<IStoredQueryManager, StoredQueryManager>();
+            services.AddSingleton<IFileProcessorConfigManager, FileProcessorConfigManager>();
 
-            MongoConnection<BsonDocument> connection = new MongoConnection<BsonDocument>(Config.GetMongoConnectionString(), Config.GetDatabase(), StoredQueries);
-            ExecuteInventoryFile(connection);
+            services.AddTransient<IFileProcessor, DailyAuditInventoryProcessor>();
 
-            Console.WriteLine($"{DateTime.Now} - Processes completed.");
-        }
-
-        static void ExecuteInventoryFile(MongoConnection<BsonDocument> connection) 
-        {
-            
-            Console.WriteLine($"{DateTime.Now} - Executing Daily Audit Inventory processes...");
-            InventoryFileProcessor processor = new InventoryFileProcessor(connection, "dailyAuditInventory", "{}", "DailyAuditInventory", typeof(DailyAuditInventoryFileWriter));
-            processor.Execute();
+            services.AddTransient<App>();
         }
     }
 }

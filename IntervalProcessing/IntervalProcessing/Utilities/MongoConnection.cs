@@ -1,8 +1,9 @@
-﻿using MongoDB.Driver;
+﻿using IntervalProcessing.Interfaces;
+using MongoDB.Driver;
 
 namespace IntervalProcessing.Utilities
 {
-    public class MongoConnection<T>
+    public class MongoConnection<T> : IMongoConnection<T>
     {
         private readonly string _connectionString;
 
@@ -24,7 +25,7 @@ namespace IntervalProcessing.Utilities
             _databaseName = databaseName;
             _collectionName = collectionName;
 
-            if (Config.GetIsServerless())
+            if (CoreConfig.GetIsServerless())
             {
                 Client = new MongoClient(GetClientSettings(_connectionString));
             }
@@ -33,7 +34,7 @@ namespace IntervalProcessing.Utilities
                 Client = new MongoClient(_connectionString);
             }
 
-            Database = Client.GetDatabase(_connectionString);
+            Database = Client.GetDatabase(_databaseName);
             Collection = Database.GetCollection<T>(_connectionString);
         }
 

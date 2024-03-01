@@ -1,9 +1,10 @@
-﻿using System;
+﻿using IntervalProcessing.Interfaces;
+using System;
 using System.IO;
 
 namespace IntervalProcessing.Writers
 {
-    public abstract class BaseWriter<T>
+    public abstract class BaseWriter<T> : IWriter<T>
     {
         private StreamWriter _writer;
         public string FileName { get; private set; }
@@ -21,7 +22,7 @@ namespace IntervalProcessing.Writers
 
         protected abstract string GetHeader();
 
-        public void Write(dynamic input)
+        public void Write(T input)
         {
             string line = Parse(input);
             _writer.WriteLine(line);
@@ -33,9 +34,9 @@ namespace IntervalProcessing.Writers
             _writer.WriteLine(line);
         }
 
-        public void WriteMultiple(IEnumerable<dynamic> inputs)
+        public void WriteMultiple(IEnumerable<T> inputs)
         {
-            foreach (dynamic input in inputs)
+            foreach (T input in inputs)
             {
                 Write(input);
             }
@@ -44,11 +45,6 @@ namespace IntervalProcessing.Writers
         public void Close()
         {
             _writer?.Close();
-            Dispose();
-        }
-
-        public void Dispose()
-        {
             _writer?.Dispose();
         }
     }

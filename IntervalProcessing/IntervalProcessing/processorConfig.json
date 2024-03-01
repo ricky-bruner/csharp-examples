@@ -1,0 +1,13 @@
+{
+  "ProcessOptions": {
+    "DailyInventoryFile": {
+      "QueryName": "dailyAuditInventory",
+      "Projection": "{}",
+      "FileNameBase": "DailyAuditInventory",
+      "WriterTypeKey": "DailyAuditInventoryFileWriter"
+    },
+    "AnotherProcess": {
+      // Other configurations
+    }
+  }
+}

@@ -3,7 +3,7 @@ using System.Text;
 
 namespace IntervalProcessing.Writers
 {
-    public class DailyAuditInventoryFileWriter : BaseWriter<BsonDocument>
+    public class DailyAuditInventoryFileWriter<T> : BaseWriter<T> where T : BsonDocument
     {
         private string _del = "|";
     
@@ -12,7 +12,7 @@ namespace IntervalProcessing.Writers
         {
         }
 
-        protected override string Parse(BsonDocument document) 
+        protected override string Parse(T document) 
         { 
             StringBuilder builder = new StringBuilder();
             builder.Append(document["auditId"].ToString());
