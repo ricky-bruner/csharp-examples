@@ -45,6 +45,7 @@ namespace IntervalProcessing
 
             // processor transients
             services.AddTransient<DailyAuditInventoryProcessor>();
+            services.AddTransient<WeeklyAuditInventoryProcessor>();
 
             // app transient
             services.AddTransient<App>();

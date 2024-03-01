@@ -13,9 +13,11 @@ namespace IntervalProcessing
 
         public void Run() 
         {
-            IFileProcessor dailyAuditInventoryProcessor = (DailyAuditInventoryProcessor)_serviceProvider.GetService(typeof(DailyAuditInventoryProcessor));
+            DailyAuditInventoryProcessor dailyAuditInventoryProcessor = (DailyAuditInventoryProcessor)_serviceProvider.GetService(typeof(DailyAuditInventoryProcessor));
             dailyAuditInventoryProcessor?.Execute();
 
+            WeeklyAuditInventoryProcessor weeklyAuditInventoryProcessor = (WeeklyAuditInventoryProcessor)_serviceProvider.GetService(typeof(WeeklyAuditInventoryProcessor));
+            weeklyAuditInventoryProcessor?.Execute();
         }
     }
 }
