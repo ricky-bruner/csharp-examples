@@ -1,8 +1,7 @@
-﻿using IntervalProcessing.Interfaces;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Reflection;
 
-namespace IntervalProcessing.Utilities
+namespace IntervalProcessing.Configurations
 {
     public class CoreConfig : IConfig
     {
@@ -14,7 +13,7 @@ namespace IntervalProcessing.Utilities
         public bool IsServerlessDB { get; }
         public DirectoryInfo WorkingDirectory { get; }
 
-        public CoreConfig(string jsonFileName) 
+        public CoreConfig(string jsonFileName)
         {
             _configRoot = new ConfigurationBuilder().SetBasePath(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)).AddJsonFile(jsonFileName).Build();
             DatabaseName = GetString("databaseName");

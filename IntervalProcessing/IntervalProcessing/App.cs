@@ -1,19 +1,23 @@
-﻿using IntervalProcessing.Interfaces;
+﻿using IntervalProcessing.Processors;
 
 namespace IntervalProcessing
 {
     public class App
     {
-        private readonly IFileProcessor _inventoryFileProcessor;
+        private readonly IFileProcessorFactory _processorFactory;
 
-        public App(IFileProcessor inventoryFileProcessor) 
-        { 
-            _inventoryFileProcessor = inventoryFileProcessor;
+        public App(IFileProcessorFactory processorFactory)
+        {
+            _processorFactory = processorFactory;
         }
 
         public void Run() 
         {
-            _inventoryFileProcessor.Execute();
+            IFileProcessor dailyAuditInventoryProcessor = _processorFactory.GetProcessor(typeof(DailyAuditInventoryProcessor).Name);
+            dailyAuditInventoryProcessor.Execute();
+
+            //IFileProcessor weeklyAuditInventoryProcessor = _processorFactory.GetProcessor("WeeklyAuditInventory");
+            //weeklyAuditInventoryProcessor.Execute();
         }
     }
 }

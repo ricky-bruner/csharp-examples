@@ -1,17 +1,17 @@
-﻿using IntervalProcessing.Configurations;
-using IntervalProcessing.Interfaces;
+﻿using IntervalProcessing.Data.Connections;
+using IntervalProcessing.Data.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using static IntervalProcessing.Utilities.Constants.DatabaseCollections;
 
-namespace IntervalProcessing.Utilities
+namespace IntervalProcessing.Data.Managers
 {
     public class FileProcessorConfigManager : IFileProcessorConfigManager
     {
         private IMongoConnection<BsonDocument> _connection;
 
-        public Dictionary<string, FileProcessorSpecification>? Settings { get; private set; }
+        public Dictionary<string, FileProcessorSpecification> Settings { get; private set; }
 
         public FileProcessorConfigManager(IMongoConnection<BsonDocument> connection)
         {
@@ -44,19 +44,19 @@ namespace IntervalProcessing.Utilities
                     throw;
                 }
             }
-            else 
-            { 
+            else
+            {
                 return Settings;
             }
         }
 
-        public async Task<FileProcessorSpecification?> GetFileProcessorSpecification(Type processorType)
+        public async Task<FileProcessorSpecification> GetFileProcessorSpecification(Type processorType)
         {
-            if (Settings == null) 
+            if (Settings == null)
             {
                 await GetSettingsAsync();
             }
-            
+
             return Settings.ContainsKey(processorType.Name) ? Settings[processorType.Name] : throw new KeyNotFoundException();
         }
     }

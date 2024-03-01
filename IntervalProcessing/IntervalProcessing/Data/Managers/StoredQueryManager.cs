@@ -1,16 +1,16 @@
-﻿using IntervalProcessing.Interfaces;
+﻿using IntervalProcessing.Data.Connections;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using static IntervalProcessing.Utilities.Constants.DatabaseCollections;
 
-namespace IntervalProcessing.Utilities
+namespace IntervalProcessing.Data.Managers
 {
     public class StoredQueryManager : IStoredQueryManager
     {
         private IMongoConnection<BsonDocument> _connection;
 
-        public StoredQueryManager(IMongoConnection<BsonDocument> connection) 
-        { 
+        public StoredQueryManager(IMongoConnection<BsonDocument> connection)
+        {
             _connection = connection;
         }
 

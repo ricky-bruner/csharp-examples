@@ -1,7 +1,7 @@
-﻿using IntervalProcessing.Interfaces;
+﻿using IntervalProcessing.Configurations;
 using MongoDB.Driver;
 
-namespace IntervalProcessing.Utilities
+namespace IntervalProcessing.Data.Connections
 {
     public class MongoConnection<T> : IMongoConnection<T>
     {
@@ -19,13 +19,13 @@ namespace IntervalProcessing.Utilities
 
         public string ConnectionString => _connectionString;
 
-        public MongoConnection(string connectionString, string databaseName, string collectionName)
+        public MongoConnection(IConfig config, string collectionName)
         {
-            _connectionString = connectionString;
-            _databaseName = databaseName;
+            _connectionString = config.MongoConnectionString;
+            _databaseName = config.DatabaseName;
             _collectionName = collectionName;
 
-            if (CoreConfig.GetIsServerless())
+            if (config.IsServerlessDB)
             {
                 Client = new MongoClient(GetClientSettings(_connectionString));
             }

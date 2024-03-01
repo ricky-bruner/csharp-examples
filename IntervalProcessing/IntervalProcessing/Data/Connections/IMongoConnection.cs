@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace IntervalProcessing.Interfaces
+namespace IntervalProcessing.Data.Connections
 {
     public interface IMongoConnection<T>
     {

@@ -1,7 +1,6 @@
-﻿using IntervalProcessing.Writers;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 
-namespace IntervalProcessing.Interfaces
+namespace IntervalProcessing.Writers
 {
     public interface IWriterFactory
     {

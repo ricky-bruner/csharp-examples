@@ -1,6 +1,7 @@
-﻿using IntervalProcessing.Interfaces;
+﻿using IntervalProcessing.Configurations;
+using IntervalProcessing.Data.Connections;
+using IntervalProcessing.Data.Managers;
 using IntervalProcessing.Processors;
-using IntervalProcessing.Utilities;
 using IntervalProcessing.Writers;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
@@ -29,12 +30,21 @@ namespace IntervalProcessing
 
         private static void ConfigureServices(IServiceCollection services) 
         {
-            services.AddSingleton(typeof(IMongoConnection<BsonDocument>), provider => 
-                new MongoConnection<BsonDocument>(CoreConfig.GetMongoConnectionString(), CoreConfig.GetDatabase(), StoredQueries));
+            // configuration settings
+            CoreConfig coreConfig = new CoreConfig("config.json");
+            services.AddSingleton<IConfig>(coreConfig);
+
+            // database connection
+            services.AddSingleton<IMongoConnection<BsonDocument>>(provider =>
+                new MongoConnection<BsonDocument>(provider.GetRequiredService<IConfig>(), StoredQueries));
+
+            // factory and manager singletons
             services.AddSingleton<IWriterFactory, WriterFactory>();
             services.AddSingleton<IStoredQueryManager, StoredQueryManager>();
             services.AddSingleton<IFileProcessorConfigManager, FileProcessorConfigManager>();
+            services.AddSingleton<IFileProcessorFactory, FileProcessorFactory>();
 
+            // processor transients
             services.AddTransient<IFileProcessor, DailyAuditInventoryProcessor>();
 
             services.AddTransient<App>();

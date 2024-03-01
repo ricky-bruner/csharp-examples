@@ -1,4 +1,5 @@
-﻿namespace IntervalProcessing.Utilities.Constants
+﻿
+namespace IntervalProcessing.Utilities.Constants
 {
     public static class DatabaseCollections
     {

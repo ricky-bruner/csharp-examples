@@ -1,7 +1,6 @@
-﻿
-namespace IntervalProcessing.Interfaces
+﻿namespace IntervalProcessing.Configurations
 {
-    internal interface IConfig
+    public interface IConfig
     {
         string DatabaseName { get; }
         string MongoConnectionString { get; }

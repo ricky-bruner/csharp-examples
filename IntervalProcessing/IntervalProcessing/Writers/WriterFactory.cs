@@ -1,5 +1,4 @@
-﻿using IntervalProcessing.Interfaces;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 
 namespace IntervalProcessing.Writers
 {

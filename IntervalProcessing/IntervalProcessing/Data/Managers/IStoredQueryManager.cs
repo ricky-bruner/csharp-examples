@@ -1,5 +1,4 @@
-﻿
-namespace IntervalProcessing.Interfaces
+﻿namespace IntervalProcessing.Data.Managers
 {
     public interface IStoredQueryManager
     {

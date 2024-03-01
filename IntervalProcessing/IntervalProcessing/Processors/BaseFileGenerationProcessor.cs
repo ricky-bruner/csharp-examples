@@ -1,52 +1,39 @@
-﻿using IntervalProcessing.Interfaces;
-using IntervalProcessing.Utilities;
+﻿using IntervalProcessing.Configurations;
+using IntervalProcessing.Data.Connections;
+using IntervalProcessing.Data.Managers;
+using IntervalProcessing.Data.Models;
+using IntervalProcessing.Writers;
 using MongoDB.Bson;
-using static IntervalProcessing.Utilities.Constants.DatabaseCollections;
 
 namespace IntervalProcessing.Processors
 {
     public abstract class BaseFileGenerationProcessor : IFileProcessor
     {
         private IMongoConnection<BsonDocument> _connection { get; set; }
-
-        private string _queryName { get; set; }
-
-        private string _collectionName { get; set; }
-
-        private string _projection { get; set; }
-
-        private string _fileNameBase { get; set; }
-
-        private string _writerTypeKey { get; set; }
-
-
+        private IConfig _config { get; set; }
+        private FileProcessorSpecification _settings { get; set; }
         private readonly IWriterFactory _writerFactory;
-
-        private IWriter<BsonDocument>? _fileWriter { get; set; }
-
+        private IWriter<BsonDocument> _fileWriter { get; set; }
         private IStoredQueryManager _queryManager { get; set; }
 
-        public BaseFileGenerationProcessor(IMongoConnection<BsonDocument> connection, IFileProcessorOptions options, IWriterFactory writerFactory, IStoredQueryManager queryManager) 
+        public BaseFileGenerationProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, Type processorType, IWriterFactory writerFactory, IStoredQueryManager queryManager) 
         { 
-            _queryName = options.QueryName;
-            _collectionName = options.CollectionName;
-            _projection = options.Projection;
-            _fileNameBase = options.FileNameBase;
-            _writerTypeKey = options.WriterTypeKey;
             _writerFactory = writerFactory;
             _connection = connection;
+            _config = config;
             _queryManager = queryManager;
+            _settings = fileProcessorConfigManager.GetFileProcessorSpecification(processorType).Result;
         }
 
         public void Execute() 
         { 
-            string query = _queryManager.GetQueryAsync(_queryName).Result;
+            string query = _queryManager.GetQueryAsync(_settings.QueryName).Result;
 
-            FileInfo inventoryFile = new FileInfo($"{CoreConfig.WorkingDirectory.FullName}{Path.DirectorySeparatorChar}{_fileNameBase}_{DateTime.Now.ToString("MMddyyyy_hhmmss")}.txt");
+            FileInfo workingFile = new FileInfo($"{_config.WorkingDirectory.FullName}{Path.DirectorySeparatorChar}{_settings.FileNameBase}_{DateTime.Now.ToString("MMddyyyy_hhmmss")}.txt");
 
-            _fileWriter = _writerFactory.CreateWriter(_writerTypeKey, inventoryFile);
+            _fileWriter = _writerFactory.CreateWriter(_settings.WriterTypeKey, workingFile);
 
-            MongoCursor cursor = new MongoCursor(query, _projection, Audits, _connection);
+            MongoCursor cursor = new MongoCursor(query, _settings.Projection, _settings.CollectionName, _connection);
 
             cursor.ExecuteCursor(WriteDataToFile).Wait();
 

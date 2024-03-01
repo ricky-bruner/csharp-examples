@@ -1,16 +1,17 @@
-﻿using IntervalProcessing.Interfaces;
+﻿using IntervalProcessing.Configurations;
+using IntervalProcessing.Data.Connections;
+using IntervalProcessing.Data.Managers;
+using IntervalProcessing.Writers;
 using MongoDB.Bson;
 
 namespace IntervalProcessing.Processors
 {
     public class DailyAuditInventoryProcessor : BaseFileGenerationProcessor
     {
-        private string _processingKey { get; set; }
-
-        public DailyAuditInventoryProcessor(IMongoConnection<BsonDocument> connection, IFileProcessorOptions options, IWriterFactory writerFactory, IStoredQueryManager queryManager)
-            : base (connection, options, writerFactory, queryManager)
+        public DailyAuditInventoryProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, IWriterFactory writerFactory, IStoredQueryManager queryManager)
+            : base (connection, config, fileProcessorConfigManager, typeof(DailyAuditInventoryProcessor), writerFactory, queryManager)
         {
-            _processingKey = "DailyAuditInventoryProcessor";
+
         }
 
         public override BsonDocument ApplyCustomLogic(BsonDocument document)

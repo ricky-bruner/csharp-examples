@@ -1,7 +1,4 @@
-﻿using IntervalProcessing.Interfaces;
-using System;
-using System.IO;
-
+﻿
 namespace IntervalProcessing.Writers
 {
     public abstract class BaseWriter<T> : IWriter<T>
