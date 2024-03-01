@@ -42,11 +42,11 @@ namespace IntervalProcessing
             services.AddSingleton<IWriterFactory, WriterFactory>();
             services.AddSingleton<IStoredQueryManager, StoredQueryManager>();
             services.AddSingleton<IFileProcessorConfigManager, FileProcessorConfigManager>();
-            services.AddSingleton<IFileProcessorFactory, FileProcessorFactory>();
 
             // processor transients
-            services.AddTransient<IFileProcessor, DailyAuditInventoryProcessor>();
+            services.AddTransient<DailyAuditInventoryProcessor>();
 
+            // app transient
             services.AddTransient<App>();
         }
     }

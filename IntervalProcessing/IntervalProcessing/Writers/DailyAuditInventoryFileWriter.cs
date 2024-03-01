@@ -30,7 +30,7 @@ namespace IntervalProcessing.Writers
             builder.Append(document["date"].ToUniversalTime().ToString("MM/dd/yyyy"));
             builder.Append(_del);
 
-            builder.Append(document["amount"].ToString());
+            builder.Append(string.Format("{0:F2}", document["amount"].AsInt32 / 100.0));
 
             return builder.ToString();
         }

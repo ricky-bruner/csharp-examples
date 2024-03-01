@@ -4,20 +4,18 @@ namespace IntervalProcessing
 {
     public class App
     {
-        private readonly IFileProcessorFactory _processorFactory;
+        private readonly IServiceProvider _serviceProvider;
 
-        public App(IFileProcessorFactory processorFactory)
+        public App(IServiceProvider serviceProvider)
         {
-            _processorFactory = processorFactory;
+            _serviceProvider = serviceProvider;
         }
 
         public void Run() 
         {
-            IFileProcessor dailyAuditInventoryProcessor = _processorFactory.GetProcessor(typeof(DailyAuditInventoryProcessor).Name);
-            dailyAuditInventoryProcessor.Execute();
+            IFileProcessor dailyAuditInventoryProcessor = (DailyAuditInventoryProcessor)_serviceProvider.GetService(typeof(DailyAuditInventoryProcessor));
+            dailyAuditInventoryProcessor?.Execute();
 
-            //IFileProcessor weeklyAuditInventoryProcessor = _processorFactory.GetProcessor("WeeklyAuditInventory");
-            //weeklyAuditInventoryProcessor.Execute();
         }
     }
 }
