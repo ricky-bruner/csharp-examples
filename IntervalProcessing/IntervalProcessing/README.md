@@ -1,3 +1,5 @@
+![.NET 6.0](https://img.shields.io/badge/.NET-6.0-blueviolet) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?&style=for-the-badge&logo=mongodb&logoColor=white)
+
 # File Generation Server Application
 
 The application is a server-side solution intended to generate text file "reports" based on data stored in MongoDB. It's designed to run as a one-off process, making it suitable for scheduling via tools like CloudWatch to execute at predetermined intervals.
