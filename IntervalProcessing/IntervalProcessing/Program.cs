@@ -1,11 +1,12 @@
-﻿using IntervalProcessing.Configurations;
-using IntervalProcessing.Data.Connections;
-using IntervalProcessing.Data.Managers;
+﻿using CoreUtilities.Configurations;
+using CoreUtilities.Data.Connections;
+using CoreUtilities.Data.Managers;
+using CoreUtilities.Writers;
 using IntervalProcessing.Processors;
 using IntervalProcessing.Writers;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
-using static IntervalProcessing.Utilities.Constants.DatabaseCollections;
+using static CoreUtilities.Constants.DatabaseCollections;
 
 namespace IntervalProcessing
 {

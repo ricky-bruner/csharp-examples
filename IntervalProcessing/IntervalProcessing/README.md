@@ -48,7 +48,7 @@ dotnet restore
 4. **Set up environment variables**
 
 ```plaintext
-Copy `config.json.example` to `config.json` and adjust the settings, including your MongoDB connection string.
+Copy `configExample.json` to `config.json` and adjust the settings, including your MongoDB connection string.
 ```
 
 5. **Seed your mongo database**

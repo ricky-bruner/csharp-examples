@@ -1,0 +1,6 @@
+{
+  "mongoConnectionString": "mongodb+srv://<username>:<password>@<clusterName>.<address>.mongodb.net/admin?retryWrites=true",
+  "databaseName": "intervalprocessing",
+  "isServerlessDB": true,
+  "workingDirectory": "C:\\testing\\IntervalProcessing"
+}

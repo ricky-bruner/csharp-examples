@@ -1,7 +1,7 @@
 ﻿using CoreUtilities.Data.Connections;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using static CoreUtilities.Utilities.Constants.DatabaseCollections;
+using static CoreUtilities.Constants.DatabaseCollections;
 
 namespace CoreUtilities.Data.Managers
 {

@@ -3,7 +3,7 @@ using CoreUtilities.Data.Models;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using static CoreUtilities.Utilities.Constants.DatabaseCollections;
+using static CoreUtilities.Constants.DatabaseCollections;
 
 namespace CoreUtilities.Data.Managers
 {

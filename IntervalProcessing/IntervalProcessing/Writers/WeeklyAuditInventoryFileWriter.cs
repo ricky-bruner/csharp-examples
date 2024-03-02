@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using CoreUtilities.Writers;
+using MongoDB.Bson;
 using System.Text;
 
 namespace IntervalProcessing.Writers

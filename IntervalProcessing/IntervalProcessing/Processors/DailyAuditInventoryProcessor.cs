@@ -1,7 +1,8 @@
-﻿using IntervalProcessing.Configurations;
-using IntervalProcessing.Data.Connections;
-using IntervalProcessing.Data.Managers;
-using IntervalProcessing.Writers;
+﻿using CoreUtilities.Configurations;
+using CoreUtilities.Data.Connections;
+using CoreUtilities.Data.Managers;
+using CoreUtilities.Processors;
+using CoreUtilities.Writers;
 using MongoDB.Bson;
 
 namespace IntervalProcessing.Processors
