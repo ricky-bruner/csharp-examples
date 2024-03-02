@@ -1,4 +1,4 @@
-![.NET 6.0](https://img.shields.io/badge/.NET-6.0-blueviolet) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?&style=for-the-badge&logo=mongodb&logoColor=white)
+![.NET 6.0](https://img.shields.io/badge/.NET-6.0-blueviolet) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?&logo=mongodb&labelColor=white)
 
 # File Generation Server Application
 
