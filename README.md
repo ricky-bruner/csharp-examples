@@ -1,4 +1,5 @@
-![.NET 6.0](https://img.shields.io/badge/.NET-6.0-blueviolet) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?&logo=mongodb&labelColor=white)
+![.NET 6.0](https://img.shields.io/badge/.NET-6.0-blueviolet) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?&logo=mongodb&labelColor=white) ![AWS](https://img.shields.io/badge/AWS-232F3E?&style=flat&logo=amazon-aws&labelColor=orange&logoColor=232F3E)
+
 
 # C# Examples Repository
 Welcome to the csharp-examples repository, a curated collection of C# projects that encapsulate the essence of software engineering practices, patterns, and principles I've embraced throughout my career. This repository is not a direct replication of my professional work but rather an homage to the learning and experiences gained across various roles, especially in backend development and ETL processes.
