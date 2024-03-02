@@ -1,0 +1,6 @@
+﻿{
+  "mongoConnectionString": "mongodb+srv://<username>:<password>@<clusterName>.<address>.mongodb.net/admin?retryWrites=true", //your connection string
+  "databaseName": "intervalprocessing", // the name of whatever database you create
+  "isServerlessDB": true,
+  "workingDirectory": "C:\\testing\\IntervalProcessing" //path to output directory for your files
+}

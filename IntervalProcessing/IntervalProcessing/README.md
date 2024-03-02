@@ -33,9 +33,9 @@ git clone https://github.com/ricky-bruner/csharp-examples.git
 
 2. **Navigate to the project directory**
 
-``bash
+```bash
 cd IntervalProcessing
-``
+```
 
 3. **Restore NuGet packages**
 
@@ -47,6 +47,12 @@ dotnet restore
 
 ```plaintext
 Copy `config.json.example` to `config.json` and adjust the settings, including your MongoDB connection string.
+```
+
+5. **Seed your mongo database**
+
+```plaintext
+Copy the script from databaseScript.js into your choice of mongo inputs - I used Studio3T. Run the script
 ```
 
 5. **Run the application**
