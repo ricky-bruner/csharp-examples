@@ -22,7 +22,7 @@ namespace CoreUtilities.Data.Managers
         {
             if (Settings == null)
             {
-                _connection.SetCollection(IntervalProcessingConfigs);
+                _connection.SetCollection(FileProcessingConfigs);
 
                 BsonDocument result = (await _connection.Collection.FindAsync(BsonSerializer.Deserialize<BsonDocument>("{}"))).FirstOrDefault();
 

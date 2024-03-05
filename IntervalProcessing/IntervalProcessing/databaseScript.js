@@ -361,16 +361,16 @@ db.getCollection("storedqueries").insertMany(defaultStoredQueries);
 
 // INTERVALPROCESSINGCONFIGS SETUP
 
-var collectionExists = db.getCollectionNames().indexOf("intervalprocessingconfigs") > -1;
+var collectionExists = db.getCollectionNames().indexOf("fileprocessingconfigs") > -1;
 
 if (!collectionExists) {
-    db.createCollection("intervalprocessingconfigs");
-    print("intervalprocessingconfigs Collection created.");
+    db.createCollection("fileprocessingconfigs");
+    print("fileprocessingconfigs Collection created.");
 } else {
-    print("intervalprocessingconfigs Collection already exists.");
+    print("fileprocessingconfigs Collection already exists.");
 }
 
-var defaultIntervalProcessingConfigs = [
+var defaultFileProcessingConfigs = [
     {
         "processes": [
             {
@@ -417,4 +417,4 @@ var defaultIntervalProcessingConfigs = [
     }
 ]
 
-db.getCollection("intervalprocessingconfigs").insertMany(defaultIntervalProcessingConfigs);
+db.getCollection("fileprocessingconfigs").insertMany(defaultFileProcessingConfigs);
