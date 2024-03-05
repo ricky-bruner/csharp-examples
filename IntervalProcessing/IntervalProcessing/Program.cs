@@ -17,16 +17,37 @@ namespace IntervalProcessing
             Console.WriteLine($"{DateTime.Now} - Initiating IntervalProcessing Processes...");
 
             ServiceCollection serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
+
+            string processToRunKey = args.Length > 0 ? args[0] : "default";
+
+            switch (processToRunKey)
+            {
+                case "FileGenerationProcesses":
+                    ConfigureFileGenerationServices(serviceCollection);
+                    break;
+                case "NightlyDataChangeProcesses":
+                    ConfigureNightlyDataChangeProcesses(serviceCollection);
+                    break;
+                case "HourlyDataChangeProcesses":
+                    ConfigureHourlyDataChangeProcesses(serviceCollection);
+                    break;
+                case "15MinuteDataChangeProcesses":
+                    ConfigureFifteenMinuteDataChangeProcesses(serviceCollection);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+
+            //ConfigureFileGenerationServices(serviceCollection);
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
             App app = serviceProvider.GetService<App>();
-            await app.Run();
+            await app.Run(processToRunKey);
 
             Console.WriteLine($"{DateTime.Now} - IntervalProcessing Complete...");
         }
 
-        private static void ConfigureServices(IServiceCollection services) 
+        private static void ConfigureFileGenerationServices(IServiceCollection services) 
         {
             // configuration settings
             CoreConfig coreConfig = new CoreConfig("config.json");
@@ -49,6 +70,21 @@ namespace IntervalProcessing
 
             // app transient
             services.AddTransient<App>();
+        }
+
+        private static void ConfigureNightlyDataChangeProcesses(IServiceCollection services)
+        { 
+        
+        }
+
+        private static void ConfigureHourlyDataChangeProcesses(IServiceCollection services)
+        { 
+        
+        }
+
+        private static void ConfigureFifteenMinuteDataChangeProcesses(IServiceCollection services)
+        { 
+        
         }
     }
 }
