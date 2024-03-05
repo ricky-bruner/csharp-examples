@@ -16,15 +16,12 @@ namespace IntervalProcessing
         {
             Console.WriteLine($"{DateTime.Now} - Initiating IntervalProcessing Processes...");
 
-            //if (DateTime.Now.Hour == 2)  //configurable to cloudwatch
-            {
-                ServiceCollection serviceCollection = new ServiceCollection();
-                ConfigureServices(serviceCollection);
-                ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
+            ServiceCollection serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
+            ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
-                App app = serviceProvider.GetService<App>();
-                await app.Run();
-            }
+            App app = serviceProvider.GetService<App>();
+            await app.Run();
 
             Console.WriteLine($"{DateTime.Now} - IntervalProcessing Complete...");
         }
