@@ -6,7 +6,7 @@ The application is a server-side solution intended to generate text file "report
 
 This project serves as an example similar to the ETL processes I've designed and managed in my previous role as a backend engineer. I had a strong desire to rewrite processes in a more modern style so that they could benefit from stronger architectural patterns, but the rapid pace of business rarely allows time for those style rewrites. This is my first attempt, and it represents a modern take on C#/.NET development, embracing Dependency Injection and various Design Patterns to structure a robust and maintainable codebase.
 
-For a detailed breakdown of the design choices and requirements of the project, please check out Documentation.md
+For a detailed breakdown of the design choices and requirements of the project, please check out [Documentation.md](https://github.com/ricky-bruner/csharp-examples/blob/main/IntervalProcessing/IntervalProcessing/Documentation.md)
 
 
 ## Features
