@@ -15,6 +15,7 @@ namespace CoreUtilities.Processors
         private readonly IWriterFactory _writerFactory;
         private IWriter<BsonDocument>? _fileWriter { get; set; }
         private IStoredQueryManager _queryManager { get; set; }
+        private readonly Type _type;
 
         public BaseFileGenerationProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, Type processorType, IWriterFactory writerFactory, IStoredQueryManager queryManager)
         {
@@ -22,11 +23,14 @@ namespace CoreUtilities.Processors
             _connection = connection;
             _config = config;
             _queryManager = queryManager;
+            _type = processorType;
             _settings = fileProcessorConfigManager.GetFileProcessorSpecification(processorType).Result;
         }
 
         public async Task Execute()
         {
+            Console.WriteLine($"{DateTime.Now} - Executing {_type.Name} process...");
+
             string query = await _queryManager.GetQueryAsync(_settings.QueryName);
 
             FileInfo workingFile = new FileInfo($"{_config.WorkingDirectory.FullName}{Path.DirectorySeparatorChar}{_settings.FileNameBase}_{DateTime.Now.ToString("MMddyyyy_hhmmss")}.txt");
@@ -51,6 +55,8 @@ namespace CoreUtilities.Processors
             _fileWriter.Close();
 
             //future logic for s3 upload and sftp delivery
+
+            Console.WriteLine($"{DateTime.Now} - {_type.Name} process complete...");
         }
 
         private void WriteDataToFile(BsonDocument document)
