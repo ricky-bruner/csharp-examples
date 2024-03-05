@@ -4,11 +4,11 @@ using System.Text;
 
 namespace IntervalProcessing.Writers
 {
-    public class WeeklyAuditInventoryFileWriter<T> : BaseWriter<T> where T : BsonDocument
+    public class DailyActiveMRRInventoryFileWriter<T> : BaseWriter<T> where T : BsonDocument
     {
         private string _del = "|";
 
-        public WeeklyAuditInventoryFileWriter(FileInfo file)
+        public DailyActiveMRRInventoryFileWriter(FileInfo file)
             : base(file)
         {
         }
@@ -16,16 +16,16 @@ namespace IntervalProcessing.Writers
         protected override string Parse(T document)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(document["auditId"].ToString());
+            builder.Append(document["mrrId"].ToString());
             builder.Append(_del);
 
             builder.Append(document["claimNumber"].AsString);
             builder.Append(_del);
 
-            builder.Append(string.Format("{0:F2}", document["amount"].AsInt32 / 100.0));
+            builder.Append(document["provider.number"].AsString);
             builder.Append(_del);
 
-            builder.Append(document["date"].ToUniversalTime().ToString("MM/dd/yyyy"));
+            builder.Append(document["provider.name"].AsString);
             builder.Append(_del);
 
             builder.Append(document["status"].AsString);
@@ -34,10 +34,7 @@ namespace IntervalProcessing.Writers
             builder.Append(document["organization"].AsString);
             builder.Append(_del);
 
-            builder.Append(document["resourceCode"].AsString);
-            builder.Append(_del);
-
-            builder.Append(document["externalId"].AsString);
+            builder.Append(document["date"].ToUniversalTime().ToString("MM/dd/yyyy"));
 
             return builder.ToString();
         }
@@ -45,16 +42,16 @@ namespace IntervalProcessing.Writers
         protected override string GetHeader()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append("Audit Id");
+            builder.Append("Request Id");
             builder.Append(_del);
 
             builder.Append("Claim Number");
             builder.Append(_del);
 
-            builder.Append("Audit Amount");
+            builder.Append("Provider Number");
             builder.Append(_del);
 
-            builder.Append("Audit Date");
+            builder.Append("Provider Name");
             builder.Append(_del);
 
             builder.Append("Status");
@@ -63,10 +60,7 @@ namespace IntervalProcessing.Writers
             builder.Append("Assigned Organization");
             builder.Append(_del);
 
-            builder.Append("Resource Code");
-            builder.Append(_del);
-
-            builder.Append("External System Org Id");
+            builder.Append("Request Date");
 
             return builder.ToString();
         }

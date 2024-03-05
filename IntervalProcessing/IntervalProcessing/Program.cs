@@ -16,7 +16,7 @@ namespace IntervalProcessing
         {
             Console.WriteLine($"{DateTime.Now} - Initiating IntervalProcessing Processes...");
 
-            //if (DateTime.Now.Hour == 2)
+            //if (DateTime.Now.Hour == 2)  //configurable to cloudwatch
             {
                 ServiceCollection serviceCollection = new ServiceCollection();
                 ConfigureServices(serviceCollection);

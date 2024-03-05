@@ -17,6 +17,12 @@ namespace IntervalProcessing.Writers
                 case "WeeklyAuditInventoryFileWriter":
                     return new WeeklyAuditInventoryFileWriter<BsonDocument>(fileInfo);
 
+                case "DailyActiveMRRInventoryFileWriter":
+                    return new WeeklyAuditInventoryFileWriter<BsonDocument>(fileInfo);
+
+                case "WeeklyMRRInventoryFileWriter":
+                    return new WeeklyAuditInventoryFileWriter<BsonDocument>(fileInfo);
+
                 default:
                     return null;
             }

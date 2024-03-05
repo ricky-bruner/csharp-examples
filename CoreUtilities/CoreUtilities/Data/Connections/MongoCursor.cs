@@ -1,6 +1,8 @@
-﻿using MongoDB.Bson;
+﻿using CoreUtilities.Configurations;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using System.Collections;
 
 namespace CoreUtilities.Data.Connections
 {
@@ -41,6 +43,34 @@ namespace CoreUtilities.Data.Connections
             FindOptions<BsonDocument> options = SetupCursorOptions(batchSize);
 
             using (IAsyncCursor<BsonDocument> cursor = await _connection.Collection.FindAsync(BsonSerializer.Deserialize<BsonDocument>(query), options))
+            {
+                while (await cursor.MoveNextAsync())
+                {
+                    IEnumerable<BsonDocument> batch = cursor.Current;
+
+                    foreach (BsonDocument document in batch)
+                    {
+                        delegatedAction(document);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public async Task<bool> ExecuteAggregateCursor(Action<BsonDocument> delegatedAction, int? batchSize = null)
+        {
+            AggregateOptions aggregateOptions = new AggregateOptions() { AllowDiskUse = true };
+
+            if (batchSize != null)
+            {
+                aggregateOptions.BatchSize = batchSize;
+            }
+
+            BsonArray pipeLineArray = BsonSerializer.Deserialize<BsonArray>(this.query);
+            List<BsonDocument> pipelines = pipeLineArray.Select(item => item.AsBsonDocument).ToList();
+
+            using (IAsyncCursor<BsonDocument> cursor = await _connection.Collection.AggregateAsync<BsonDocument>(pipelines, aggregateOptions))
             {
                 while (await cursor.MoveNextAsync())
                 {

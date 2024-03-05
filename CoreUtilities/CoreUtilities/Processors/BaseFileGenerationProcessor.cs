@@ -4,6 +4,7 @@ using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
 using CoreUtilities.Data.Models;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace CoreUtilities.Processors
 {
@@ -25,7 +26,7 @@ namespace CoreUtilities.Processors
             _settings = fileProcessorConfigManager.GetFileProcessorSpecification(processorType).Result;
         }
 
-        public void Execute()
+        public async void Execute()
         {
             string query = _queryManager.GetQueryAsync(_settings.QueryName).Result;
 
@@ -35,7 +36,18 @@ namespace CoreUtilities.Processors
 
             MongoCursor cursor = new MongoCursor(query, _settings.Projection, _settings.CollectionName, _connection);
 
-            cursor.ExecuteCursor(WriteDataToFile).Wait();
+            if (query.Contains("aggregate("))
+            {
+                int startIndex = query.IndexOf('(') + 1;
+                int endIndex = query.LastIndexOf(')');
+                cursor.query = query.Substring(startIndex, endIndex - startIndex);
+
+                await cursor.ExecuteAggregateCursor(WriteDataToFile);
+            }
+            else
+            {
+                await cursor.ExecuteCursor(WriteDataToFile);
+            }
 
             _fileWriter.Close();
 
