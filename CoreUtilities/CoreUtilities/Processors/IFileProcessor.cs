@@ -2,6 +2,6 @@
 {
     public interface IFileProcessor
     {
-        void Execute();
+        Task Execute();
     }
 }

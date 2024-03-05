@@ -4,7 +4,6 @@ using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
 using CoreUtilities.Data.Models;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Serializers;
 
 namespace CoreUtilities.Processors
 {
@@ -14,7 +13,7 @@ namespace CoreUtilities.Processors
         private IConfig _config { get; set; }
         private FileProcessorSpecification _settings { get; set; }
         private readonly IWriterFactory _writerFactory;
-        private IWriter<BsonDocument> _fileWriter { get; set; }
+        private IWriter<BsonDocument>? _fileWriter { get; set; }
         private IStoredQueryManager _queryManager { get; set; }
 
         public BaseFileGenerationProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, Type processorType, IWriterFactory writerFactory, IStoredQueryManager queryManager)
@@ -26,9 +25,9 @@ namespace CoreUtilities.Processors
             _settings = fileProcessorConfigManager.GetFileProcessorSpecification(processorType).Result;
         }
 
-        public async void Execute()
+        public async Task Execute()
         {
-            string query = _queryManager.GetQueryAsync(_settings.QueryName).Result;
+            string query = await _queryManager.GetQueryAsync(_settings.QueryName);
 
             FileInfo workingFile = new FileInfo($"{_config.WorkingDirectory.FullName}{Path.DirectorySeparatorChar}{_settings.FileNameBase}_{DateTime.Now.ToString("MMddyyyy_hhmmss")}.txt");
 
@@ -56,7 +55,7 @@ namespace CoreUtilities.Processors
 
         private void WriteDataToFile(BsonDocument document)
         {
-            _fileWriter.Write(ApplyCustomLogic(document));
+            _fileWriter?.Write(ApplyCustomLogic(document));
         }
 
         public abstract BsonDocument ApplyCustomLogic(BsonDocument document);

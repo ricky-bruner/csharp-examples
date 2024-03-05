@@ -12,7 +12,7 @@ namespace IntervalProcessing
 {
     public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             Console.WriteLine($"{DateTime.Now} - Initiating IntervalProcessing Processes...");
 
@@ -23,7 +23,7 @@ namespace IntervalProcessing
                 ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
                 App app = serviceProvider.GetService<App>();
-                app.Run();
+                await app.Run();
             }
 
             Console.WriteLine($"{DateTime.Now} - IntervalProcessing Complete...");
@@ -47,6 +47,8 @@ namespace IntervalProcessing
             // processor transients
             services.AddTransient<DailyAuditInventoryProcessor>();
             services.AddTransient<WeeklyAuditInventoryProcessor>();
+            services.AddTransient<DailyActiveMRRInventoryProcessor>();
+            services.AddTransient<WeeklyMRRInventoryProcessor>();
 
             // app transient
             services.AddTransient<App>();

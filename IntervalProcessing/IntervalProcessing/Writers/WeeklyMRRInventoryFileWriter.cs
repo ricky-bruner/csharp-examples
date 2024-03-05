@@ -22,10 +22,10 @@ namespace IntervalProcessing.Writers
             builder.Append(document["claimNumber"].AsString);
             builder.Append(_del);
 
-            builder.Append(document["provider.number"].AsString);
+            builder.Append(document["provider"]["number"].AsString);
             builder.Append(_del);
 
-            builder.Append(document["provider.name"].AsString);
+            builder.Append(document["provider"]["name"].AsString);
             builder.Append(_del);
 
             builder.Append(document["builtProviderAddress"].AsString);

@@ -11,13 +11,19 @@ namespace IntervalProcessing
             _serviceProvider = serviceProvider;
         }
 
-        public void Run() 
+        public async Task Run() 
         {
             DailyAuditInventoryProcessor dailyAuditInventoryProcessor = (DailyAuditInventoryProcessor)_serviceProvider.GetService(typeof(DailyAuditInventoryProcessor));
-            dailyAuditInventoryProcessor?.Execute();
+            await dailyAuditInventoryProcessor?.Execute();
 
             WeeklyAuditInventoryProcessor weeklyAuditInventoryProcessor = (WeeklyAuditInventoryProcessor)_serviceProvider.GetService(typeof(WeeklyAuditInventoryProcessor));
-            weeklyAuditInventoryProcessor?.Execute();
+            await weeklyAuditInventoryProcessor?.Execute();
+
+            DailyActiveMRRInventoryProcessor dailyActiveMRRInventoryProcessor = (DailyActiveMRRInventoryProcessor)_serviceProvider.GetService(typeof(DailyActiveMRRInventoryProcessor));
+            await dailyActiveMRRInventoryProcessor?.Execute();
+
+            WeeklyMRRInventoryProcessor weeklyMRRInventoryProcessor = (WeeklyMRRInventoryProcessor)_serviceProvider.GetService(typeof(WeeklyMRRInventoryProcessor));
+            await weeklyMRRInventoryProcessor?.Execute();
         }
     }
 }
