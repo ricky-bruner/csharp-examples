@@ -38,7 +38,6 @@ namespace IntervalProcessing
                     throw new NotImplementedException();
             }
 
-            //ConfigureFileGenerationServices(serviceCollection);
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
             App app = serviceProvider.GetService<App>();

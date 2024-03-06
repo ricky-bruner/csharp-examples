@@ -1,6 +1,7 @@
 ﻿using CoreUtilities.Configurations;
 using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
+using CoreUtilities.ExtensionMethods;
 using CoreUtilities.Processors;
 using CoreUtilities.Writers;
 using MongoDB.Bson;
@@ -23,16 +24,16 @@ namespace IntervalProcessing.Processors
             BsonDocument customizedDoc = document.DeepClone().AsBsonDocument;
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(document["provider"]["address"]["address1"].AsString.Trim());
+            sb.Append(document.GetStringValue("provider.address.address1").Trim());
             sb.Append(_del);
-            sb.Append(document["provider"]["address"]["address2"].AsString.Trim());
+            sb.Append(document.GetStringValue("provider.address.address2").Trim());
             sb.Append(_del);
-            sb.Append(document["provider"]["address"]["city"].AsString.Trim());
+            sb.Append(document.GetStringValue("provider.address.city").Trim());
             sb.Append(",");
             sb.Append(_del);
-            sb.Append(document["provider"]["address"]["state"].AsString.Trim());
+            sb.Append(document.GetStringValue("provider.address.state").Trim());
             sb.Append(_del);
-            sb.Append(document["provider"]["address"]["zip"].AsString.Trim());
+            sb.Append(document.GetStringValue("provider.address.zip").Trim());
             sb.Replace(_del, " ");
 
             customizedDoc.Add("builtProviderAddress", sb.ToString());

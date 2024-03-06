@@ -1,6 +1,7 @@
 ﻿using CoreUtilities.Configurations;
 using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
+using CoreUtilities.ExtensionMethods;
 using CoreUtilities.Processors;
 using CoreUtilities.Writers;
 using MongoDB.Bson;
@@ -19,7 +20,7 @@ namespace IntervalProcessing.Processors
         {
             BsonDocument customizedDoc = document.DeepClone().AsBsonDocument;
 
-            if (customizedDoc["organization"].AsString == "Transparency Health") 
+            if (customizedDoc.GetStringValue("organization") == "Transparency Health") 
             {
                 customizedDoc["organization"] = "Clear View Health Services";
             }

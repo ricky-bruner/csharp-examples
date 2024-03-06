@@ -1,4 +1,5 @@
-﻿using CoreUtilities.Writers;
+﻿using CoreUtilities.ExtensionMethods;
+using CoreUtilities.Writers;
 using MongoDB.Bson;
 using System.Text;
 
@@ -16,28 +17,28 @@ namespace IntervalProcessing.Writers
         protected override string Parse(T document)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(document["mrrId"].ToString());
+            builder.Append(document.GetStringValue("mrrId"));
             builder.Append(_del);
 
-            builder.Append(document["claimNumber"].AsString);
+            builder.Append(document.GetStringValue("claimNumber"));
             builder.Append(_del);
 
-            builder.Append(document["provider"]["number"].AsString);
+            builder.Append(document.GetStringValue("provider.number"));
             builder.Append(_del);
 
-            builder.Append(document["provider"]["name"].AsString);
+            builder.Append(document.GetStringValue("provider.name"));
             builder.Append(_del);
 
-            builder.Append(document["builtProviderAddress"].AsString);
+            builder.Append(document.GetStringValue("builtProviderAddress"));
             builder.Append(_del);
 
-            builder.Append(document["status"].AsString);
+            builder.Append(document.GetStringValue("status"));
             builder.Append(_del);
 
-            builder.Append(document["organization"].AsString);
+            builder.Append(document.GetStringValue("organization"));
             builder.Append(_del);
 
-            builder.Append(document["date"].ToUniversalTime().ToString("MM/dd/yyyy"));
+            builder.Append(document.GetElementValue("date").ToUniversalTime().ToString("MM/dd/yyyy"));
 
             return builder.ToString();
         }

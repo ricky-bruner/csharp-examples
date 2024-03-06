@@ -1,4 +1,5 @@
-﻿using CoreUtilities.Writers;
+﻿using CoreUtilities.ExtensionMethods;
+using CoreUtilities.Writers;
 using MongoDB.Bson;
 using System.Text;
 
@@ -16,28 +17,28 @@ namespace IntervalProcessing.Writers
         protected override string Parse(T document)
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(document["auditId"].ToString());
+            builder.Append(document.GetStringValue("auditId"));
             builder.Append(_del);
 
-            builder.Append(document["claimNumber"].AsString);
+            builder.Append(document.GetStringValue("claimNumber"));
             builder.Append(_del);
 
-            builder.Append(string.Format("{0:F2}", document["amount"].AsInt32 / 100.0));
+            builder.Append(string.Format("{0:F2}", document.GetElementValue("amount").AsInt32 / 100.0));
             builder.Append(_del);
 
-            builder.Append(document["date"].ToUniversalTime().ToString("MM/dd/yyyy"));
+            builder.Append(document.GetElementValue("date").ToUniversalTime().ToString("MM/dd/yyyy"));
             builder.Append(_del);
 
-            builder.Append(document["status"].AsString);
+            builder.Append(document.GetStringValue("status"));
             builder.Append(_del);
 
-            builder.Append(document["organization"].AsString);
+            builder.Append(document.GetStringValue("organization"));
             builder.Append(_del);
 
-            builder.Append(document["resourceCode"].AsString);
+            builder.Append(document.GetStringValue("resourceCode"));
             builder.Append(_del);
 
-            builder.Append(document["externalId"].AsString);
+            builder.Append(document.GetStringValue("externalId"));
 
             return builder.ToString();
         }
