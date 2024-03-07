@@ -5,5 +5,6 @@
         public const string StoredQueries = "storedqueries";
         public const string Audits = "audits";
         public const string FileProcessingConfigs = "fileprocessingconfigs";
+        public const string DataUpdateConfigs = "dataupdateconfigs";
     }
 }

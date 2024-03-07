@@ -1,8 +1,6 @@
-﻿using CoreUtilities.Configurations;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using System.Collections;
 
 namespace CoreUtilities.Data.Connections
 {

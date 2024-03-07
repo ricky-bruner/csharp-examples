@@ -1,4 +1,6 @@
-﻿using IntervalProcessing.Processors;
+﻿using CoreUtilities.Data.Enums;
+using CoreUtilities.Processors;
+using IntervalProcessing.Processors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace IntervalProcessing
@@ -20,13 +22,16 @@ namespace IntervalProcessing
                     await RunFileGenerationProcesses();
                     break;
                 case "NightlyDataChangeProcesses":
-                    await RunNightlyDataChangeProcesses();
+                    await RunDataChangeProcesses(RunCadence.Nightly);
                     break;
                 case "HourlyDataChangeProcesses":
-                    await RunHourlyDataChangeProcesses();
+                    await RunDataChangeProcesses(RunCadence.Hourly);
                     break;
-                case "15MinuteDataChangeProcesses":
-                    await RunFifteenMinuteDataChangeProcesses();
+                case "HalfHourlyDataChangeProcesses":
+                    await RunDataChangeProcesses(RunCadence.HalfHourly);
+                    break;
+                case "QuarterHourlyDataChangeProcesses":
+                    await RunDataChangeProcesses(RunCadence.QuarterHourly);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -51,13 +56,10 @@ namespace IntervalProcessing
             }
         }
 
-        private async Task RunNightlyDataChangeProcesses()
-        { }
-
-        private async Task RunHourlyDataChangeProcesses()
-        { }
-
-        private async Task RunFifteenMinuteDataChangeProcesses()
-        { }
+        private async Task RunDataChangeProcesses(RunCadence runCadence)
+        {
+            IDataProcessor dataChangeProcessor = (IDataProcessor)_serviceProvider.GetService(typeof(QueryBasedDataUpdateProcessor));
+            await dataChangeProcessor.Execute(runCadence);
+        }
     }
 }

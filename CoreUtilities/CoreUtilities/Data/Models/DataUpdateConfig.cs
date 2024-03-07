@@ -18,8 +18,11 @@ namespace CoreUtilities.Data.Models
         [BsonElement("isActive")]
         public bool IsActive { get; set; }
 
-        [BsonElement("updateElements")]
-        public List<UpdateElement> UpdateElements { get; set; }
+        [BsonElement("singleFieldUpdateElements")]
+        public List<SingleFieldUpdateElement> SingleFieldUpdateElements { get; set; }
+
+        [BsonElement("arrayObjectFieldUpdateElements")]
+        public List<ArrayObjectFieldUpdateElement> ArrayObjectFieldUpdateElements { get; set; }
 
         [BsonElement("runCadence")]
         public RunCadence RunCadence { get; set; }

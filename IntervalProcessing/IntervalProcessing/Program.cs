@@ -1,6 +1,7 @@
 ﻿using CoreUtilities.Configurations;
 using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
+using CoreUtilities.Processors;
 using CoreUtilities.Writers;
 using IntervalProcessing.Processors;
 using IntervalProcessing.Writers;
@@ -26,13 +27,10 @@ namespace IntervalProcessing
                     ConfigureFileGenerationServices(serviceCollection);
                     break;
                 case "NightlyDataChangeProcesses":
-                    ConfigureNightlyDataChangeProcesses(serviceCollection);
-                    break;
                 case "HourlyDataChangeProcesses":
-                    ConfigureHourlyDataChangeProcesses(serviceCollection);
-                    break;
-                case "15MinuteDataChangeProcesses":
-                    ConfigureFifteenMinuteDataChangeProcesses(serviceCollection);
+                case "HalfHourlyDataChangeProcesses":
+                case "QuarterHourlyDataChangeProcesses":
+                    ConfigureDataChangeServices(serviceCollection);
                     break;
                 default:
                     throw new NotImplementedException();
@@ -71,19 +69,23 @@ namespace IntervalProcessing
             services.AddTransient<App>();
         }
 
-        private static void ConfigureNightlyDataChangeProcesses(IServiceCollection services)
-        { 
-        
-        }
+        private static void ConfigureDataChangeServices(IServiceCollection services)
+        {
+            // configuration settings
+            CoreConfig coreConfig = new CoreConfig("config.json");
+            services.AddSingleton<IConfig>(coreConfig);
 
-        private static void ConfigureHourlyDataChangeProcesses(IServiceCollection services)
-        { 
-        
-        }
+            // database connection
+            services.AddSingleton<IMongoConnection<BsonDocument>>(provider =>
+                new MongoConnection<BsonDocument>(provider.GetRequiredService<IConfig>(), StoredQueries));
 
-        private static void ConfigureFifteenMinuteDataChangeProcesses(IServiceCollection services)
-        { 
-        
+            //manager singletons
+            services.AddSingleton<IQueryAutomationManager, QueryAutomationManager>();
+
+            // processor transients
+            services.AddTransient<QueryBasedDataUpdateProcessor>();
+            // app transient
+            services.AddTransient<App>();
         }
     }
 }
