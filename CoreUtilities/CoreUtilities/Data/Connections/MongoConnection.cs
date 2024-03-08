@@ -40,14 +40,20 @@ namespace CoreUtilities.Data.Connections
 
         public void SetDatabase(string databaseName)
         {
-            _databaseName = databaseName;
-            Database = Client.GetDatabase(_databaseName);
+            if (databaseName != _databaseName) 
+            { 
+                _databaseName = databaseName;
+                Database = Client.GetDatabase(_databaseName);
+            } 
         }
 
         public void SetCollection(string collectionName)
         {
-            _collectionName = collectionName;
-            Collection = Database.GetCollection<T>(_collectionName);
+            if (collectionName != _collectionName) 
+            { 
+                _collectionName = collectionName;
+                Collection = Database.GetCollection<T>(_collectionName);
+            }
         }
 
         private MongoClientSettings GetClientSettings(string connectionString)

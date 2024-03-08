@@ -6,5 +6,6 @@
         public const string Audits = "audits";
         public const string FileProcessingConfigs = "fileprocessingconfigs";
         public const string DataUpdateConfigs = "dataupdateconfigs";
+        public const string AWSSettingsCollection = "awssettings";
     }
 }

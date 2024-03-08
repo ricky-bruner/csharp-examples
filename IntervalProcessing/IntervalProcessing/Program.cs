@@ -1,4 +1,5 @@
-﻿using CoreUtilities.Configurations;
+﻿using CoreUtilities.CloudServices.AWS;
+using CoreUtilities.Configurations;
 using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
 using CoreUtilities.Processors;
@@ -19,7 +20,8 @@ namespace IntervalProcessing
 
             ServiceCollection serviceCollection = new ServiceCollection();
 
-            string processToRunKey = args.Length > 0 ? args[0] : "default";
+            //string processToRunKey = args.Length > 0 ? args[0] : "default";
+            string processToRunKey = "FileGenerationProcesses";
 
             switch (processToRunKey)
             {
@@ -58,6 +60,8 @@ namespace IntervalProcessing
             services.AddSingleton<IWriterFactory, WriterFactory>();
             services.AddSingleton<IStoredQueryManager, StoredQueryManager>();
             services.AddSingleton<IFileProcessorConfigManager, FileProcessorConfigManager>();
+            services.AddSingleton<IAWSSettingsManager, AWSSettingsManager>();
+            services.AddSingleton<IS3Uploader, S3Uploader>();
 
             // processor transients
             services.AddTransient<DailyAuditInventoryProcessor>();
@@ -77,7 +81,7 @@ namespace IntervalProcessing
 
             // database connection
             services.AddSingleton<IMongoConnection<BsonDocument>>(provider =>
-                new MongoConnection<BsonDocument>(provider.GetRequiredService<IConfig>(), StoredQueries));
+                new MongoConnection<BsonDocument>(provider.GetRequiredService<IConfig>(), DataUpdateConfigs));
 
             //manager singletons
             services.AddSingleton<IQueryAutomationManager, QueryAutomationManager>();

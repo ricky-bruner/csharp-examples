@@ -4,6 +4,7 @@ using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
 using CoreUtilities.Data.Models;
 using MongoDB.Bson;
+using CoreUtilities.CloudServices.AWS;
 
 namespace CoreUtilities.Processors
 {
@@ -15,19 +16,21 @@ namespace CoreUtilities.Processors
         private readonly IWriterFactory _writerFactory;
         private IWriter<BsonDocument>? _fileWriter { get; set; }
         private IStoredQueryManager _queryManager { get; set; }
+        private IS3Uploader _s3Uploader { get; set; }
         private readonly Type _type;
 
-        public BaseFileGenerationProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, Type processorType, IWriterFactory writerFactory, IStoredQueryManager queryManager)
+        public BaseFileGenerationProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, Type processorType, IWriterFactory writerFactory, IStoredQueryManager queryManager, IS3Uploader s3Uploader)
         {
             _writerFactory = writerFactory;
             _connection = connection;
             _config = config;
             _queryManager = queryManager;
+            _s3Uploader = s3Uploader;
             _type = processorType;
             _settings = fileProcessorConfigManager.GetFileProcessorSpecification(processorType).Result;
         }
 
-        public async Task Execute()
+        public virtual async Task Execute()
         {
             Console.WriteLine($"{DateTime.Now} - Executing {_type.Name} process...");
 
@@ -54,7 +57,8 @@ namespace CoreUtilities.Processors
 
             _fileWriter.Close();
 
-            //future logic for s3 upload and sftp delivery
+            //future logic for sftp delivery and database detail storage
+            await _s3Uploader.UploadFileAsync("GeneratedFiles", workingFile.FullName);
 
             Console.WriteLine($"{DateTime.Now} - {_type.Name} process complete...");
         }
