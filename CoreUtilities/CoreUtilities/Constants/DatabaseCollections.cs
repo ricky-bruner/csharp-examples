@@ -7,5 +7,6 @@
         public const string FileProcessingConfigs = "fileprocessingconfigs";
         public const string DataUpdateConfigs = "dataupdateconfigs";
         public const string AWSSettingsCollection = "awssettings";
+        public const string GeneratedFiles = "generatedfiles";
     }
 }
