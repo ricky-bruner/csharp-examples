@@ -18,15 +18,13 @@ namespace CoreUtilities.CloudServices.AWS
             _settingsManager = settingsManager;
         }
 
-        public async Task UploadFileAsync(string key, string filePath)
+        public async Task UploadFileAsync(string filePath, GeneratedFile file)
         {
             try
             {
                 TransferUtility fileTransferUtility = await GetFileTransferUtilityAsync();
 
-                string locationKey = string.IsNullOrEmpty(key.Trim()) ? Path.GetFileName(filePath) : $"{key}/{Path.GetFileName(filePath)}";
-
-                await fileTransferUtility.UploadAsync(filePath, _settings.RootBucket, locationKey);
+                await fileTransferUtility.UploadAsync(filePath, _settings.RootBucket, file.Location);
             }
             catch (AmazonS3Exception e)
             {
@@ -40,12 +38,12 @@ namespace CoreUtilities.CloudServices.AWS
             }
         }
 
-        public async Task DownloadFileAsync(string filePath, string bucketName, string key)
+        public async Task DownloadFileAsync(string filePath, string key)
         {
             try
             {
                 TransferUtility fileTransferUtility = await GetFileTransferUtilityAsync();
-                await fileTransferUtility.DownloadAsync(filePath, bucketName, key);
+                await fileTransferUtility.DownloadAsync(filePath, _settings.RootBucket, key);
             }
             catch (AmazonS3Exception e)
             {
@@ -79,18 +77,23 @@ namespace CoreUtilities.CloudServices.AWS
             }
         }
 
-        private async Task<TransferUtility> GetFileTransferUtilityAsync()
+        public async Task<string> GetBucketAsync() 
         {
-            await ConfigureS3ClientAsync();
-            return new TransferUtility(_s3Client);
+            await ConfigureSettingsAsync();
+            return _settings.RootBucket;
+        }
+
+        private async Task ConfigureSettingsAsync()
+        {
+            if (_settings == null) 
+            {
+                _settings = await _settingsManager.GetAWSSettingsAsync();
+            }
         }
 
         private async Task ConfigureS3ClientAsync()
         {
-            if (_settings == null)
-            {
-                _settings = await _settingsManager.GetAWSSettingsAsync();
-            }
+            await ConfigureSettingsAsync();
 
             if (_s3Client == null)
             {
@@ -98,7 +101,13 @@ namespace CoreUtilities.CloudServices.AWS
             }
         }
 
-        private async Task<bool> Exists(IAmazonS3 s3Client, string bucket, string key)
+        private async Task<TransferUtility> GetFileTransferUtilityAsync()
+        {
+            await ConfigureS3ClientAsync();
+            return new TransferUtility(_s3Client);
+        }
+
+        public async Task<bool> Exists(IAmazonS3 s3Client, string bucket, string key)
         {
             bool exists = false;
 

@@ -40,7 +40,7 @@ namespace CoreUtilities.Data.Connections
 
         public void SetDatabase(string databaseName)
         {
-            if (databaseName != _databaseName) 
+            if (databaseName != Database.DatabaseNamespace.DatabaseName) 
             { 
                 _databaseName = databaseName;
                 Database = Client.GetDatabase(_databaseName);
@@ -49,7 +49,7 @@ namespace CoreUtilities.Data.Connections
 
         public void SetCollection(string collectionName)
         {
-            if (collectionName != _collectionName) 
+            if (collectionName != Collection.CollectionNamespace.CollectionName) 
             { 
                 _collectionName = collectionName;
                 Collection = Database.GetCollection<T>(_collectionName);

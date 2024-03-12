@@ -40,6 +40,8 @@ namespace CoreUtilities.Data.Connections
         {
             FindOptions<BsonDocument> options = SetupCursorOptions(batchSize);
 
+            ChangeCollection(_collectionName);
+
             using (IAsyncCursor<BsonDocument> cursor = await _connection.Collection.FindAsync(BsonSerializer.Deserialize<BsonDocument>(query), options))
             {
                 while (await cursor.MoveNextAsync())
@@ -67,6 +69,8 @@ namespace CoreUtilities.Data.Connections
 
             BsonArray pipeLineArray = BsonSerializer.Deserialize<BsonArray>(this.query);
             List<BsonDocument> pipelines = pipeLineArray.Select(item => item.AsBsonDocument).ToList();
+
+            ChangeCollection(_collectionName);
 
             using (IAsyncCursor<BsonDocument> cursor = await _connection.Collection.AggregateAsync<BsonDocument>(pipelines, aggregateOptions))
             {
@@ -107,8 +111,11 @@ namespace CoreUtilities.Data.Connections
 
         public void ChangeCollection(string collectionName)
         {
-            _collectionName = collectionName;
-            _connection.SetCollection(_collectionName);
+            if (collectionName != _connection.Collection.CollectionNamespace.CollectionName) 
+            { 
+                _collectionName = collectionName;
+                _connection.SetCollection(_collectionName);
+            }
         }
     }
 }

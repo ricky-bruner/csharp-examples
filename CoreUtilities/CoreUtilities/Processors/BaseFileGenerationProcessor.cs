@@ -4,7 +4,7 @@ using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
 using CoreUtilities.Data.Models;
 using MongoDB.Bson;
-using CoreUtilities.CloudServices.AWS;
+using CoreUtilities.CloudServices.Utilities;
 
 namespace CoreUtilities.Processors
 {
@@ -14,18 +14,18 @@ namespace CoreUtilities.Processors
         private IConfig _config { get; set; }
         private FileProcessorSpecification _settings { get; set; }
         private readonly IWriterFactory _writerFactory;
-        private IWriter<BsonDocument>? _fileWriter { get; set; }
+        private IWriter<BsonDocument> _fileWriter { get; set; }
         private IStoredQueryManager _queryManager { get; set; }
-        private IS3Uploader _s3Uploader { get; set; }
         private readonly Type _type;
+        private IGeneratedFileUploader _uploader { get; set; }
 
-        public BaseFileGenerationProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, Type processorType, IWriterFactory writerFactory, IStoredQueryManager queryManager, IS3Uploader s3Uploader)
+        public BaseFileGenerationProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, Type processorType, IWriterFactory writerFactory, IStoredQueryManager queryManager, IGeneratedFileUploader uploader)
         {
             _writerFactory = writerFactory;
             _connection = connection;
             _config = config;
             _queryManager = queryManager;
-            _s3Uploader = s3Uploader;
+            _uploader = uploader;
             _type = processorType;
             _settings = fileProcessorConfigManager.GetFileProcessorSpecification(processorType).Result;
         }
@@ -56,16 +56,24 @@ namespace CoreUtilities.Processors
             }
 
             _fileWriter.Close();
+            await _uploader.Upload(workingFile, "GeneratedFiles", _type.Name);
 
-            //future logic for sftp delivery and database detail storage
-            await _s3Uploader.UploadFileAsync("GeneratedFiles", workingFile.FullName);
+            //GeneratedFile completedFile = new GeneratedFile(workingFile, "GeneratedFiles", _type.Name);
+
+            ////future logic for sftp delivery
+            //await _s3Uploader.UploadFileAsync(workingFile.FullName, completedFile);
+
+            //completedFile.Bucket = await _s3Uploader.GetBucketAsync();
+
+            //_connection.SetCollection(GeneratedFiles);
+            //await _connection.Collection.InsertOneAsync(completedFile.ToBsonDocument());
 
             Console.WriteLine($"{DateTime.Now} - {_type.Name} process complete...");
         }
 
         private void WriteDataToFile(BsonDocument document)
         {
-            _fileWriter?.Write(ApplyCustomLogic(document));
+            _fileWriter.Write(ApplyCustomLogic(document));
         }
 
         public abstract BsonDocument ApplyCustomLogic(BsonDocument document);
