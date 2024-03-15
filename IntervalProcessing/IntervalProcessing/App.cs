@@ -1,7 +1,6 @@
 ﻿using CoreUtilities.Data.Enums;
 using CoreUtilities.Processors;
 using IntervalProcessing.Processors;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace IntervalProcessing
 {
@@ -41,18 +40,18 @@ namespace IntervalProcessing
         private async Task RunFileGenerationProcesses() 
         {
             DailyAuditInventoryProcessor dailyAuditInventoryProcessor = (DailyAuditInventoryProcessor)_serviceProvider.GetService(typeof(DailyAuditInventoryProcessor));
-            await dailyAuditInventoryProcessor?.Execute();
+            await dailyAuditInventoryProcessor.Execute();
 
             DailyActiveMRRInventoryProcessor dailyActiveMRRInventoryProcessor = (DailyActiveMRRInventoryProcessor)_serviceProvider.GetService(typeof(DailyActiveMRRInventoryProcessor));
-            await dailyActiveMRRInventoryProcessor?.Execute();
+            await dailyActiveMRRInventoryProcessor.Execute();
 
             if (DateTime.Now.DayOfWeek == DayOfWeek.Friday)
             {
                 WeeklyAuditInventoryProcessor weeklyAuditInventoryProcessor = (WeeklyAuditInventoryProcessor)_serviceProvider.GetService(typeof(WeeklyAuditInventoryProcessor));
-                await weeklyAuditInventoryProcessor?.Execute();
+                await weeklyAuditInventoryProcessor.Execute();
 
                 WeeklyMRRInventoryProcessor weeklyMRRInventoryProcessor = (WeeklyMRRInventoryProcessor)_serviceProvider.GetService(typeof(WeeklyMRRInventoryProcessor));
-                await weeklyMRRInventoryProcessor?.Execute();
+                await weeklyMRRInventoryProcessor.Execute();
             }
         }
 

@@ -27,6 +27,8 @@ namespace IntervalProcessing
             // If running aws:
             string processToRunKey = Environment.GetEnvironmentVariable("processToRun");
 
+            Console.WriteLine($"processToRun: {processToRunKey}");
+
             switch (processToRunKey)
             {
                 case "FileGenerationProcesses":
