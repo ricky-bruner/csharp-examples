@@ -58,16 +58,6 @@ namespace CoreUtilities.Processors
             _fileWriter.Close();
             await _uploader.Upload(workingFile, "GeneratedFiles", _type.Name);
 
-            //GeneratedFile completedFile = new GeneratedFile(workingFile, "GeneratedFiles", _type.Name);
-
-            ////future logic for sftp delivery
-            //await _s3Uploader.UploadFileAsync(workingFile.FullName, completedFile);
-
-            //completedFile.Bucket = await _s3Uploader.GetBucketAsync();
-
-            //_connection.SetCollection(GeneratedFiles);
-            //await _connection.Collection.InsertOneAsync(completedFile.ToBsonDocument());
-
             Console.WriteLine($"{DateTime.Now} - {_type.Name} process complete...");
         }
 

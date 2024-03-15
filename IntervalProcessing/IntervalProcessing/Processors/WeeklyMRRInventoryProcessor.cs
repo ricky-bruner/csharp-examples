@@ -1,4 +1,5 @@
 ﻿using CoreUtilities.CloudServices.AWS;
+using CoreUtilities.CloudServices.Utilities;
 using CoreUtilities.Configurations;
 using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
@@ -14,8 +15,8 @@ namespace IntervalProcessing.Processors
     {
         private string _del = "~";
 
-        public WeeklyMRRInventoryProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, IWriterFactory writerFactory, IStoredQueryManager queryManager, IS3Uploader s3Uploader)
-            : base(connection, config, fileProcessorConfigManager, typeof(WeeklyMRRInventoryProcessor), writerFactory, queryManager, s3Uploader)
+        public WeeklyMRRInventoryProcessor(IMongoConnection<BsonDocument> connection, IConfig config, IFileProcessorConfigManager fileProcessorConfigManager, IWriterFactory writerFactory, IStoredQueryManager queryManager, IGeneratedFileUploader uploader)
+            : base(connection, config, fileProcessorConfigManager, typeof(WeeklyMRRInventoryProcessor), writerFactory, queryManager, uploader)
         {
 
         }

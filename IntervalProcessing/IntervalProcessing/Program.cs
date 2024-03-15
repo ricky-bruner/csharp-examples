@@ -1,4 +1,5 @@
 ﻿using CoreUtilities.CloudServices.AWS;
+using CoreUtilities.CloudServices.Utilities;
 using CoreUtilities.Configurations;
 using CoreUtilities.Data.Connections;
 using CoreUtilities.Data.Managers;
@@ -62,6 +63,7 @@ namespace IntervalProcessing
             services.AddSingleton<IFileProcessorConfigManager, FileProcessorConfigManager>();
             services.AddSingleton<IAWSSettingsManager, AWSSettingsManager>();
             services.AddSingleton<IS3Uploader, S3Uploader>();
+            services.AddSingleton<IGeneratedFileUploader, GeneratedFileUploader>();
 
             // processor transients
             services.AddTransient<DailyAuditInventoryProcessor>();
