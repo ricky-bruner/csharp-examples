@@ -21,8 +21,11 @@ namespace IntervalProcessing
 
             ServiceCollection serviceCollection = new ServiceCollection();
 
-            //string processToRunKey = args.Length > 0 ? args[0] : "default";
-            string processToRunKey = "FileGenerationProcesses";
+            // If running local:
+            //string processToRunKey = "FileGenerationProcesses";
+
+            // If running aws:
+            string processToRunKey = Environment.GetEnvironmentVariable("processToRun");
 
             switch (processToRunKey)
             {
