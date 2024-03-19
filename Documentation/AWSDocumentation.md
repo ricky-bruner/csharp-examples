@@ -4,6 +4,10 @@ Below are detailed instructions on how to create and configure each step involve
 
 These instructions are arranged in an order that flows sequentially, so you should not be configuring/creating any element that relies on a piece that you have yet to create. This will hopefully lend itself to a smooth implementation for you.
 
+## The System Design Diagram (current version):
+
+![AWS System Design](URL_of_the_image "AWS Architecture")
+
 ## VPC Configuration
 
 - **VPC Instructions:**

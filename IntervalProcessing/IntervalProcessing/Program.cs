@@ -90,7 +90,7 @@ namespace IntervalProcessing
             services.AddSingleton<IMongoConnection<BsonDocument>>(provider =>
                 new MongoConnection<BsonDocument>(provider.GetRequiredService<IConfig>(), DataUpdateConfigs));
 
-            //manager singletons
+            // manager singletons
             services.AddSingleton<IQueryAutomationManager, QueryAutomationManager>();
 
             // processor transients
