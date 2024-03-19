@@ -6,7 +6,7 @@ These instructions are arranged in an order that flows sequentially, so you shou
 
 ## The System Design Diagram (current version):
 
-![AWS System Design](https://github.com/ricky-bruner/csharp-examples/blob/main/Documentation/DocumentationAssets/IntervalProcessing_Cloud_SystemDesign.pdf)
+![alt text](./DocumentationAssets/IntervalProcessingCloudSystemDesign.png)
 
 ## VPC Configuration
 
