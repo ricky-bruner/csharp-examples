@@ -1,4 +1,4 @@
-# AWS Architecture Documentation
+# <img src="./DocumentationAssets/AWS.jpg" width="50" height="50"> AWS Architecture Documentation
 
 Below are detailed instructions on how to create and configure each step involved in the AWS Architecture of this project. You will use Docker, VPC, ECR, ECS, Fargate, S3, EventBridge, CloudWatch, and IAM to bring life to the serverless execution of this application. Note that all of this is configured for the free tier of AWS, meaning that everything is public. If you desire to create private repositories, you will find that most of the instructions still apply, save for a few bits in the Docker related portion. 
 
@@ -8,7 +8,9 @@ These instructions are arranged in an order that flows sequentially, so you shou
 
 ![alt text](./DocumentationAssets/IntervalProcessingCloudSystemDesign.png)
 
-## VPC Configuration
+Now, lets dive into the instructions.
+
+## <img src="./DocumentationAssets/AWSVPC.jpg" width="30" height="30"> VPC Configuration
 
 - **VPC Instructions:**
     - Navigate to **AWS VPC (Virtual Private Cloud)**, click your default VPC.
@@ -40,7 +42,7 @@ These instructions are arranged in an order that flows sequentially, so you shou
 
 - Your Elastic IP address, located in **Elastic IPs**, can be copied to whitelist into your mongo atlas database, under Network Access in your atlas cluster. You will need to do this for the AWS task to be able to communicate with your mongo database.
 
-## S3 Bucket
+## <img src="./DocumentationAssets/AWSS3.jpg" width="30" height="30"> S3 Bucket
 
 - **Bucket Name:** `intervalprocessing`
   - Used for storing output files and logs.
@@ -58,7 +60,7 @@ These instructions are arranged in an order that flows sequentially, so you shou
     3. Create folder: `GeneratedFiles`
 
 
-## ECR: Docker Image Management
+## <img src="./DocumentationAssets/AWSECR.jpg" width="30" height="30"> <img src="./DocumentationAssets/docker.png" width="30" height="30"> ECR: Docker Image Management
 
 - **ECR Instructions:**
     1. Navigate to **AWS ECR (Elastic Container Registry)**, click `Create repository`
@@ -91,7 +93,7 @@ These instructions are arranged in an order that flows sequentially, so you shou
      - Again, replace `<your-ecr-repository-URI>` with your **ECR** **URI**
   6. Confirm the image uploaded to **AWS ECR**
 
-## ECS: Container Management, Task Definitions
+## <img src="./DocumentationAssets/AWSECS.jpg" width="30" height="30"> ECS: Container Management, Task Definitions
 - **ECS Instructions:**
     1. Navigate to **AWS ECS (Elastic Container Service)**, click `Create cluster`
     2. Select the following:
@@ -156,7 +158,7 @@ These instructions are arranged in an order that flows sequentially, so you shou
                 - **Ephemoral storage Amount**: 21
         - Click `Create`, then repeat this process until there is 1 Task Defintion for each process listed above.
 
-## IAM: Users, User Groups, Policies
+## <img src="./DocumentationAssets/AWSIAM.jpg" width="30" height="30"> IAM: Users, User Groups, Policies 
 
 - Creation of IAM users and user groups to manage permissions.
     1. User Groups: Create `intervalprocessingusers`
@@ -216,7 +218,7 @@ These instructions are arranged in an order that flows sequentially, so you shou
         ```
     5. Assign both `IntervalProcessingECRAccess` and `IntervalProcessingECRPublicAccess` to the `intervalprocessingusers` User Group.
 
-## EventBridge: Schedule Tasks, Run Containers
+## <img src="./DocumentationAssets/AWSEventBridge.jpg" width="30" height="30"> EventBridge: Schedule Tasks, Run Containers
 - **EventBridge Instructions:**
     - Navigate to **AWS EventBridge**.
     - Navigate to `Schedules`, click `Create schedule`
@@ -263,5 +265,5 @@ These instructions are arranged in an order that flows sequentially, so you shou
             - save the schedule
     - Create 1 Schedule for each Task Defintion until complete.
 
-## Test the Fargate Process
+## <img src="./DocumentationAssets/AWSCloudWatch.jpg" width="30" height="30"> Test the Fargate Process, Review CloudWatch
 - Navigate back to **AWS ECS**, to `Task Defintions`, select any task you want to test, and then choose to `Deploy -> Run Task`. Ensure the tasks complete, and review the logs for them in **AWS CloudWatch**. If successful, enable your schedules that you are ready to run in **AWS EventBridge**, and congratulations, you have completed this AWS Architected System!
